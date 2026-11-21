@@ -30,4 +30,4 @@ Tests: `g++ -std=c++17 -o bin/run_tests.exe src/tests.cpp src/morse.cpp src/cont
 
 ## History
 
-See [docs/Patch Notes.txt](docs/Patch%20Notes.txt) for the version history.
+See [docs/CHANGELOG.md](docs/CHANGELOG.md) for the version history.
