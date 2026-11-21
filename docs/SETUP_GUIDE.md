@@ -7,17 +7,15 @@
 **Option A: Using MSYS2 (Recommended for Windows)**
 
 1. Download and install [MSYS2](https://www.msys2.org/)
-2. Open MSYS2 MinGW 64-bit terminal
-3. Run these commands:
+2. Open MSYS2 UCRT64 terminal and run these commands:
 
 ```bash
 pacman -Syu
-pacman -S mingw-w64-x86_64-sfml mingw-w64-x86_64-gcc
+pacman -S mingw-w64-ucrt-x86_64-sfml mingw-w64-ucrt-x86_64-gcc
 ```
 
-4. Add MSYS2 to your PATH:
-   - Open System Properties → Environment Variables
-   - Add: `C:\msys64\mingw64\bin` to PATH
+3. Optional (only if you want `g++` available everywhere): add `C:\msys64\ucrt64\bin` to PATH.
+   Inside the MSYS2 UCRT64 shell it already works.
 
 **Option B: Using Visual Studio**
 
@@ -32,15 +30,14 @@ pacman -S mingw-w64-x86_64-sfml mingw-w64-x86_64-gcc
 
 ### 2. Compile the Program
 
-**Using MSYS2 GCC:**
+The code uses SFML 3 (requires C++17). From the project root:
+
+**Using MSYS2 GCC (UCRT64 shell):**
 ```bash
-g++ -o "bin/Morse_Code_Learning_Program_V1.3.exe" src/Morse_Code_Learning_Program_V1.3.cpp -lsfml-graphics -lsfml-audio -lsfml-window -lsfml-system
+g++ -std=c++17 -o bin/Morse_Code_Learning_Program_V1.3.exe src/Morse_Code_Learning_Program_V1.3.cpp -lsfml-graphics -lsfml-audio -lsfml-window -lsfml-system
 ```
 
-**Using Visual Studio:**
-```bash
-cl /EHsc /Fe:bin\Morse_Code_Learning_Program_V1.3.exe src\Morse_Code_Learning_Program_V1.3.cpp /I"C:\msys64\mingw64\include" /link /LIBPATH:"C:\msys64\mingw64\lib" sfml-graphics.lib sfml-audio.lib sfml-window.lib sfml-system.lib
-```
+The SFML 3 DLLs the exe needs are already in `bin\` (copied from `C:\msys64\ucrt64\bin`).
 
 ### 3. Run the Program
 
