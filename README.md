@@ -5,8 +5,8 @@ Supports guided lessons, a practice mode, and two-way translation (text ↔ Mors
 
 ## Run it
 
-Double-click **`Run Morse Program.bat`** (must stay in the project root — the program loads
-`assets\` and `bin\Lessons\` relative to where it is launched).
+Double-click **`bin\Morse_Code_Learning_Program_V1.3.exe`** (or use `Run Morse Program.bat`).
+The program locates its own data (`assets\`, lessons, practice files) regardless of where it is launched from.
 
 ## Build it
 

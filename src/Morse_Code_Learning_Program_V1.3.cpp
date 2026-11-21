@@ -7,6 +7,8 @@
 #include<cctype>
 #include<unordered_map>
 #include<SFML/Audio.hpp>
+#include<filesystem>
+#include<windows.h>
     enum class AppStates { Mainmenu, LessonButton , Morse2Text, Text2Morse, Practice};
     AppStates currentstate = AppStates::Mainmenu;
     struct LessonStep 
@@ -450,6 +452,11 @@ void updateUI(sf::RenderWindow& window, AppStates currentstate, std::string& Inp
 }
   
     int main(){
+        // All data paths are relative to the project root (this exe's parent folder's parent),
+        // so switch there first — this makes the exe work no matter where it is launched from.
+        char exePath[MAX_PATH];
+        GetModuleFileNameA(nullptr, exePath, MAX_PATH);
+        std::filesystem::current_path(std::filesystem::path(exePath).parent_path().parent_path());
         sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "After Getting Bitch Slapped", sf::State::Fullscreen);//this sets the size of the gui screen
         window.setFramerateLimit(50);//limiting frame rate
         sf::Font font;

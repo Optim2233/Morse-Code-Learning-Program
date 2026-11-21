@@ -41,8 +41,7 @@ The SFML 3 DLLs the exe needs are already in `bin\` (copied from `C:\msys64\ucrt
 
 ### 3. Run the Program
 
-**Important:** the program loads `assets\` and `bin\Lessons\` relative to the folder it is launched from,
-so it must be run from the project root (or use `Run Morse Program.bat` in the project root):
+The program switches to the project root on startup, so it can be launched from anywhere:
 
 ```bash
 ./bin/Morse_Code_Learning_Program_V1.3.exe
