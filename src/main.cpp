@@ -23,7 +23,7 @@ int main() {
     GetModuleFileNameA(nullptr, exePath, MAX_PATH);
     std::filesystem::current_path(std::filesystem::path(exePath).parent_path().parent_path());
 
-    sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "After Getting Bitch Slapped", sf::State::Fullscreen); // this sets the gui screen
+    sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "Morse Code Learning Program", sf::State::Fullscreen); // this sets the gui screen
     window.setFramerateLimit(50); // limiting frame rate
 
     sf::Font font;
