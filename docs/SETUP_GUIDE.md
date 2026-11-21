@@ -34,7 +34,7 @@ The code uses SFML 3 (requires C++17). From the project root:
 
 **Using MSYS2 GCC (UCRT64 shell):**
 ```bash
-g++ -std=c++17 -o bin/Morse_Code_Learning_Program_V1.3.exe src/Morse_Code_Learning_Program_V1.3.cpp -lsfml-graphics -lsfml-audio -lsfml-window -lsfml-system
+g++ -std=c++17 -o bin/Morse_Code_Learning_Program_V1.3.exe src/*.cpp -lsfml-graphics -lsfml-audio -lsfml-window -lsfml-system
 ```
 
 The SFML 3 DLLs the exe needs are already in `bin\` (copied from `C:\msys64\ucrt64\bin`).
