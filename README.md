@@ -16,12 +16,14 @@ Requires a C++17 compiler and SFML 3. See [docs/SETUP_GUIDE.md](docs/SETUP_GUIDE
 g++ -std=c++17 -o bin/Morse_Code_Learning_Program_V1.3.exe src/*.cpp -lsfml-graphics -lsfml-audio -lsfml-window -lsfml-system
 ```
 
+Tests: `g++ -std=c++17 -o bin/run_tests.exe src/tests.cpp src/morse.cpp src/content.cpp && bin/run_tests.exe`
+
 ## Project structure
 
 ```
 ├── src/       Source code
 ├── assets/    Font and dot/dash sounds
-├── bin/       Built exe + DLLs (not committed); Lessons and practice content live here
+├── bin/       Built exe + DLLs (not committed); lessons and practice content live here
 ├── docs/      Setup guide, patch notes, original presentation
 └── archive/   Old versions and prototypes (kept for reference)
 ```

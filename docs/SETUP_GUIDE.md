@@ -39,6 +39,14 @@ g++ -std=c++17 -o bin/Morse_Code_Learning_Program_V1.3.exe src/*.cpp -lsfml-grap
 
 The SFML 3 DLLs the exe needs are already in `bin\` (copied from `C:\msys64\ucrt64\bin`).
 
+### 4. Run the Tests
+
+The pure logic (Morse translation, lesson/practice parsing) has a small test suite:
+
+```bash
+g++ -std=c++17 -o bin/run_tests.exe src/tests.cpp src/morse.cpp src/content.cpp && bin/run_tests.exe
+```
+
 ### 3. Run the Program
 
 The program switches to the project root on startup, so it can be launched from anywhere:

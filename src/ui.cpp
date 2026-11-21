@@ -2,6 +2,14 @@
 #include "morse.hpp"
 
 std::string wrapText(const std::string& str, sf::Font& font, unsigned char charSize, float maxWidth) {
+    // shortcut: memoizes the last two (str, size, width) results — the two translation texts get
+    // re-wrapped every frame; more than two distinct strings per frame means we measure again anyway.
+    struct WrapResult { std::string str, wrapped; unsigned char charSize; float maxWidth; };
+    static WrapResult slots[2];
+    for (const auto& s : slots)
+        if (s.charSize == charSize && s.maxWidth == maxWidth && s.str == str)
+            return s.wrapped;
+
     std::string wrap, word;
     float lineWidth = 0;
     float spaceWidth = sf::Text(font, " ", charSize).getLocalBounds().size.x; // we need the width of a space in pixels, not its length
@@ -26,14 +34,8 @@ std::string wrapText(const std::string& str, sf::Font& font, unsigned char charS
             word += str[i]; // still inside a word; keep collecting characters
         }
     }
-    if (!word.empty()) { // safety check for a trailing word without a space after it
-        sf::Text temp(font, word, charSize);
-        float wordWidth = temp.getLocalBounds().size.x;
-        if (wordWidth + spaceWidth > maxWidth) {
-            wrap += '\n';
-        }
-        wrap += word;
-    }
+    slots[0] = slots[1];
+    slots[1] = WrapResult{ str, wrap, charSize, maxWidth };
     return wrap;
 }
 

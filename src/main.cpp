@@ -37,7 +37,7 @@ int main() {
     std::vector<sf::Text> sidebarLessonLabels;             // lesson mode sidebar labels
 
     int currentLessonIndex = 1;
-    std::string lessonFilename = "bin/Lessons/Lesson" + std::to_string(currentLessonIndex) + ".txt";
+    std::string lessonFilename = "bin/lessons/Lesson" + std::to_string(currentLessonIndex) + ".txt";
     if (!loadLesson(lessonFilename, lessonSteps)) {
         std::cerr << "Failed to load the lesson : " << lessonFilename;
         return 1;
@@ -49,7 +49,8 @@ int main() {
     std::string lessonInput;
 
     // ---- Lesson sidebar buttons ----
-    const int totalLessons = 18;
+    // Count the real files instead of hardcoding, so new lessons appear automatically.
+    const int totalLessons = countContentFiles("bin/lessons", "Lesson");
     const int lessonsPerCol = 9;
     const float buttonWidth = 80.f, buttonHeight = 50.f, spacing = 20.f;
     const sf::Vector2f sidebarStart(80.f, 100.f);
@@ -163,9 +164,10 @@ int main() {
     exitButton.setFillColor(sf::Color::Black);
 
     // ---- Small side buttons ----
+    // Anchored to the right edge of the window (fixed 1825 put them off-screen below 1920px width).
     sf::RectangleShape backButton(sf::Vector2f(80.f, 50.f));
     backButton.setFillColor(sf::Color::Green);
-    backButton.setPosition({ 1825.f, 20.f });
+    backButton.setPosition({ windowSize.x - 95.f, 20.f });
 
     sf::RectangleShape clearButton(sf::Vector2f(80.f, 50.f));
     clearButton.setFillColor(sf::Color::Green);
@@ -322,7 +324,7 @@ int main() {
                         // Setup sidebar buttons and labels for practice mode
                         sidebarPracticeButtons.clear();
                         sidebarPracticeLabels.clear();
-                        const int totalPracticeFiles = 40;
+                        const int totalPracticeFiles = countContentFiles("bin/practice", "practice");
                         const int practicePerCol = 10;
                         for (int i = 0; i < totalPracticeFiles; ++i) {
                             int col = i / practicePerCol;
@@ -383,7 +385,7 @@ int main() {
                         for (size_t i = 0; i < sidebarLessonButtons.size(); i++) {
                             if (sidebarLessonButtons[i].getGlobalBounds().contains(mousePos)) {
                                 currentLessonIndex = static_cast<int>(i) + 1;
-                                lessonFilename = "bin/Lessons/Lesson" + std::to_string(currentLessonIndex) + ".txt";
+                                lessonFilename = "bin/lessons/Lesson" + std::to_string(currentLessonIndex) + ".txt";
                                 if (!loadLesson(lessonFilename, lessonSteps)) {
                                     std::cerr << "Failed to load the Lesson : " << lessonFilename << std::endl;
                                 } else {
@@ -415,8 +417,10 @@ int main() {
                     }
                 }
 
-                // Handle morseKey press (for Morse code input)
-                if (morseKey.getGlobalBounds().contains(mousePos)) {
+                // Handle morseKey press — only in the modes where the key is actually drawn,
+                // otherwise its leftover position would swallow clicks in empty screen areas.
+                if ((currentState == AppStates::LessonMode || currentState == AppStates::Practice || currentState == AppStates::Morse2Text)
+                    && morseKey.getGlobalBounds().contains(mousePos)) {
                     (void)pressClock.restart(); // Start timing the press
                     isPressed = true; // Mark as pressed
                 }

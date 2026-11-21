@@ -2,6 +2,18 @@
 #include <fstream>
 #include <iostream>
 #include <cctype>
+#include <filesystem>
+
+int countContentFiles(const std::string& dir, const std::string& prefix) {
+    int count = 0;
+    std::error_code ec;
+    for (const auto& entry : std::filesystem::directory_iterator(dir, ec)) {
+        const std::string& name = entry.path().filename().string();
+        if (name.compare(0, prefix.size(), prefix) == 0 && name.size() >= 4 && name.compare(name.size() - 4, 4, ".txt") == 0)
+            ++count;
+    }
+    return count;
+}
 
 bool loadLesson(const std::string& filename, std::vector<LessonStep>& steps) {
     std::ifstream file(filename);
@@ -57,7 +69,7 @@ bool loadPractice(const std::string& filename, std::vector<PracticeStep>& practi
 
 bool loadNextLesson(std::vector<LessonStep>& lessonSteps, int& currentLessonIndex, std::string& lessonFilename) {
     currentLessonIndex++;
-    lessonFilename = "bin/Lessons/Lesson" + std::to_string(currentLessonIndex) + ".txt";
+    lessonFilename = "bin/lessons/Lesson" + std::to_string(currentLessonIndex) + ".txt";
     if (!loadLesson(lessonFilename, lessonSteps)) {
         std::cerr << "Failed to load the lesson :" << lessonFilename << std::endl;
         return false;

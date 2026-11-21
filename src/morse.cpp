@@ -34,11 +34,13 @@ std::string textToMorse(const std::string& input) {
 
 std::string morseToText(const std::string& morseInput) {
     std::string output, token;
-    std::unordered_map<std::string, char> reverseMap; // the Morse code table, inverted: "..." -> 'S'
-
-    for (const auto& pair : MorseMap) {
-        reverseMap[pair.second] = pair.first; // reverseMap["..."] = 'S'
-    }
+    // Built once, not on every call (this runs every frame while the Morse2Text screen is open).
+    static const std::unordered_map<std::string, char> reverseMap = [] {
+        std::unordered_map<std::string, char> m; // the Morse code table, inverted: "..." -> 'S'
+        for (const auto& pair : MorseMap)
+            m[pair.second] = pair.first; // reverseMap["..."] = 'S'
+        return m;
+    }();
 
     std::istringstream stream(morseInput); // splits the string by spaces
 
