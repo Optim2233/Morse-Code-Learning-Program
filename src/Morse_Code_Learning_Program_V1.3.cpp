@@ -138,12 +138,12 @@
     std::string wraptext(std::string& str, sf::Font& font, unsigned char charsize , float maxwidth){// basically, it adds a line break once the string passes a set maximum limit
         std::string wrap, word;
         float linewidth = 0;
-        float spacewidth =sf::Text(" ",font,charsize).getLocalBounds().width;//we need the with of space on the sfml gui(pixel). Not the length. thus, getLocalBounds().width is used
+        float spacewidth =sf::Text(font, " ",charsize).getLocalBounds().size.x;//we need the with of space on the sfml gui(pixel). Not the length. thus, getLocalBounds().width is used
 
         for(size_t i = 0; i <= str.size(); ++i){//size_t is used here. Oversimplified explanation is int is used for small looping. size_t is used for larger looping
             if(i == str.size() || str[i]== ' '){//checks for end of string(input) or end with space
-                sf::Text temp(word,font,charsize);//declare a temporary text object
-                float wordwidth = temp.getLocalBounds().width;//gets the width of that object
+                sf::Text temp(font, word,charsize);//declare a temporary text object
+                float wordwidth = temp.getLocalBounds().size.x;//gets the width of that object
 
                 if(linewidth + spacewidth > maxwidth){  //checks whether it exceeds the set max limit
                     wrap += '\n';//if so, add line break or rather add new line
@@ -161,8 +161,8 @@
         }
         }
         if(!word.empty()){//This condition is for safety check. Note: This if-condition is redundant and will be removed on future patches  
-            sf::Text temp(word,font, charsize);
-            float wordwidth = temp.getLocalBounds().width;
+            sf::Text temp(font, word, charsize);
+            float wordwidth = temp.getLocalBounds().size.x;
             if(wordwidth + spacewidth > maxwidth){
                 wrap += '\n';
             }
@@ -243,13 +243,9 @@ void drawMorse2Text(sf::RenderWindow& window, sf::Font& font, const std::string&
     window.draw(BackText);
     window.draw(Clearbutton);
     window.draw(ClearText);
-    MorseKey.setPosition(Clearbutton.getGlobalBounds().left, Clearbutton.getGlobalBounds().top + Clearbutton.getGlobalBounds().height + 30.f);
-    MorseKeytext.setOrigin(
-        MorseKeytext.getLocalBounds().left + MorseKeytext.getLocalBounds().width / 2.f,
-        MorseKeytext.getLocalBounds().top + MorseKeytext.getLocalBounds().height / 2.f);
-    MorseKeytext.setPosition(
-        MorseKey.getPosition().x + MorseKey.getRadius(),
-        MorseKey.getPosition().y + MorseKey.getRadius());
+    MorseKey.setPosition({ Clearbutton.getGlobalBounds().position.x, Clearbutton.getGlobalBounds().position.y + Clearbutton.getGlobalBounds().size.y + 30.f });
+    MorseKeytext.setOrigin({ MorseKeytext.getLocalBounds().position.x + MorseKeytext.getLocalBounds().size.x / 2.f, MorseKeytext.getLocalBounds().position.y + MorseKeytext.getLocalBounds().size.y / 2.f });
+    MorseKeytext.setPosition({ MorseKey.getPosition().x + MorseKey.getRadius(), MorseKey.getPosition().y + MorseKey.getRadius() });
     window.draw(MorseKey);
     window.draw(MorseKeytext);
     window.draw(SwitchButton);
@@ -310,18 +306,12 @@ void drawLesson(sf::RenderWindow& window, std::vector<LessonStep>& LessonSteps, 
         }
         window.draw(coveractswi);
 
-        MorseKey.setPosition(
-            BigTextButton.getPosition().x + BigTextButton.getSize().x / 2.f - MorseKey.getRadius(),
-            BigTextButton.getPosition().y + BigTextButton.getSize().y / 2.f - MorseKey.getRadius() + 450.f
-        );
-        MorseKeytext.setOrigin(
-            MorseKeytext.getLocalBounds().left + MorseKeytext.getLocalBounds().width / 2.f,
-            MorseKeytext.getLocalBounds().top + MorseKeytext.getLocalBounds().height / 2.f
-        );
-        MorseKeytext.setPosition(
-            MorseKey.getPosition().x + MorseKey.getRadius(),
-            MorseKey.getPosition().y + MorseKey.getRadius()
-        );
+        MorseKey.setPosition({ BigTextButton.getPosition().x + BigTextButton.getSize().x / 2.f - MorseKey.getRadius(), BigTextButton.getPosition().y + BigTextButton.getSize().y / 2.f - MorseKey.getRadius() + 450.f
+         });
+        MorseKeytext.setOrigin({ MorseKeytext.getLocalBounds().position.x + MorseKeytext.getLocalBounds().size.x / 2.f, MorseKeytext.getLocalBounds().position.y + MorseKeytext.getLocalBounds().size.y / 2.f
+         });
+        MorseKeytext.setPosition({ MorseKey.getPosition().x + MorseKey.getRadius(), MorseKey.getPosition().y + MorseKey.getRadius()
+         });
         window.draw(MorseKey);
         window.draw(MorseKeytext);
     }
@@ -376,14 +366,9 @@ void drawPractice(sf::RenderWindow& window, std::vector<PracticeStep>& PracticeS
         window.draw(inputText);
         
 
-        MorseKey.setPosition(BigTextButton.getPosition().x + BigTextButton.getSize().x / 2.f - MorseKey.getRadius(),
-                             BigTextButton.getPosition().y + BigTextButton.getSize().y / 2.f - MorseKey.getRadius() + 450.f);
-        MorseKeytext.setOrigin(
-            MorseKeytext.getLocalBounds().left + MorseKeytext.getLocalBounds().width / 2.f,
-            MorseKeytext.getLocalBounds().top + MorseKeytext.getLocalBounds().height / 2.f);
-        MorseKeytext.setPosition(
-            MorseKey.getPosition().x + MorseKey.getRadius(),
-            MorseKey.getPosition().y + MorseKey.getRadius());
+        MorseKey.setPosition({ BigTextButton.getPosition().x + BigTextButton.getSize().x / 2.f - MorseKey.getRadius(), BigTextButton.getPosition().y + BigTextButton.getSize().y / 2.f - MorseKey.getRadius() + 450.f });
+        MorseKeytext.setOrigin({ MorseKeytext.getLocalBounds().position.x + MorseKeytext.getLocalBounds().size.x / 2.f, MorseKeytext.getLocalBounds().position.y + MorseKeytext.getLocalBounds().size.y / 2.f });
+        MorseKeytext.setPosition({ MorseKey.getPosition().x + MorseKey.getRadius(), MorseKey.getPosition().y + MorseKey.getRadius() });
 
         window.draw(MorseKey);
         window.draw(MorseKeytext);
@@ -465,10 +450,10 @@ void updateUI(sf::RenderWindow& window, AppStates currentstate, std::string& Inp
 }
   
     int main(){
-        sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "After Getting Bitch Slapped", sf::Style::Fullscreen);//this sets the size of the gui screen
+        sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "After Getting Bitch Slapped", sf::State::Fullscreen);//this sets the size of the gui screen
         window.setFramerateLimit(50);//limiting frame rate
         sf::Font font;
-        if(!font.loadFromFile("assets/arial.ttf")){//uploading font, only arial - current patch : 1.2
+        if(!font.openFromFile("assets/arial.ttf")){//uploading font, only arial - current patch : 1.2
             std::cout<<"Failed to load the font.";
             return 1;
         }
@@ -500,347 +485,262 @@ void updateUI(sf::RenderWindow& window, AppStates currentstate, std::string& Inp
             int row = i % lessonperCol;
             sf::RectangleShape btn(sf::Vector2f(buttonwidth, buttonheight));
             btn.setFillColor(sf::Color(200,200,200));
-            btn.setPosition(
-                sidebarstart.x + col * (buttonwidth +spacing),
-                sidebarstart.y + row * (buttonheight + spacing)
-            );
+            btn.setPosition({ sidebarstart.x + col * (buttonwidth +spacing), sidebarstart.y + row * (buttonheight + spacing)
+             });
             sidebarLessonbuttons.push_back(btn);
 
-            sf::Text labels(std::to_string(i +1), font, 18);
+            sf::Text labels(font, std::to_string(i + 1), 18);
             labels.setFillColor(sf::Color::Black);
-            labels.setPosition(
-                btn.getPosition().x + 20.f , btn.getPosition().y + 12.f
-            );
+            labels.setPosition({ btn.getPosition().x + 20.f , btn.getPosition().y + 12.f
+             });
             sidebarlabels.push_back(labels);
         }
 
         sf::RectangleShape LessonButton (sf::Vector2f (400.f, 80.f));
         sf::Vector2u windowSize = window.getSize();
         sf::Vector2f objectSize = LessonButton.getSize();
-        LessonButton.setPosition(
-        (windowSize.x - objectSize.x) / 2.f,
-        (windowSize.y - objectSize.y) / 2.f);
+        LessonButton.setPosition({ (windowSize.x - objectSize.x) / 2.f, (windowSize.y - objectSize.y) / 2.f });
         LessonButton.setFillColor(sf::Color::Black);
 
         sf::RectangleShape BigTextButton (sf::Vector2f(1290.f,200.f));
         BigTextButton.setFillColor(sf::Color::White);
-        BigTextButton.setPosition(500.f,0.f);
+        BigTextButton.setPosition({ 500.f, 0.f });
 
-        sf::Text BigText(" ", font, 100);
+        sf::Text BigText(font, " ", 100);
         BigText.setFillColor(sf::Color::Black);
-        BigText.setOrigin(
-            BigText.getLocalBounds().left + BigText.getLocalBounds().width / 2.f,
-            BigText.getLocalBounds().top + BigText.getLocalBounds().height / 2.f
-        );
-        BigText.setPosition(
-            (BigTextButton.getPosition().x + BigTextButton.getSize(). x / 2.f) - 10.f,
-            (BigTextButton.getPosition().y + BigTextButton.getSize().y / 2.f ) + 23.f
-        );
+        BigText.setOrigin({ BigText.getLocalBounds().position.x + BigText.getLocalBounds().size.x / 2.f, BigText.getLocalBounds().position.y + BigText.getLocalBounds().size.y / 2.f
+         });
+        BigText.setPosition({ (BigTextButton.getPosition().x + BigTextButton.getSize(). x / 2.f) - 10.f, (BigTextButton.getPosition().y + BigTextButton.getSize().y / 2.f ) + 23.f
+         });
 
         sf::RectangleShape L2Practice(sf::Vector2f(80.f, 50.f));
         L2Practice.setFillColor(sf::Color::Green);
-        L2Practice.setPosition(10.f,150.f);
+        L2Practice.setPosition({ 10.f, 150.f });
 
-        sf::Text L2PText("To Practice", font, 18);
+        sf::Text L2PText(font, "To Practice", 18);
         L2PText.setFillColor(sf::Color::Red);
-        L2PText.setOrigin(
-            L2PText.getLocalBounds().left + L2PText.getLocalBounds().width / 2.f,
-            L2PText.getLocalBounds().top + L2PText.getLocalBounds().height / 2.f
-        );
-        L2PText.setPosition(
-            L2Practice.getPosition().x + L2Practice.getSize().x / 2.f,
-            L2Practice.getPosition().y + L2Practice.getSize().y / 2.f
-        );
+        L2PText.setOrigin({ L2PText.getLocalBounds().position.x + L2PText.getLocalBounds().size.x / 2.f, L2PText.getLocalBounds().position.y + L2PText.getLocalBounds().size.y / 2.f
+         });
+        L2PText.setPosition({ L2Practice.getPosition().x + L2Practice.getSize().x / 2.f, L2Practice.getPosition().y + L2Practice.getSize().y / 2.f
+         });
 
         sf::RectangleShape PracticeButton(sf::Vector2f(400.f, 80.f));
         PracticeButton.setFillColor(sf::Color::Black);
-        PracticeButton.setPosition(
-            (windowSize.x - objectSize.x ) / 2.f,
-            (windowSize.y - objectSize.y) / 2.f - 241.f
-        );
+        PracticeButton.setPosition({ (windowSize.x - objectSize.x ) / 2.f, (windowSize.y - objectSize.y) / 2.f - 241.f
+         });
 
         
-        sf::Text PracticeButtonText("Practice", font, 24);
+        sf::Text PracticeButtonText(font, "Practice", 24);
         PracticeButtonText.setFillColor(sf::Color::Green);
-        PracticeButtonText.setOrigin(
-        PracticeButtonText.getLocalBounds().left + 
-        PracticeButtonText.getLocalBounds().width / 2.f,
-        PracticeButtonText.getLocalBounds().top + 
-        PracticeButtonText.getLocalBounds().height / 2.f
-        );
-        PracticeButtonText.setPosition(
-        PracticeButton.getPosition().x + 
-        PracticeButton.getSize().x / 2.f,
-        PracticeButton.getPosition().y + 
+        PracticeButtonText.setOrigin({ PracticeButtonText.getLocalBounds().position.x + 
+        PracticeButtonText.getLocalBounds().size.x / 2.f, PracticeButtonText.getLocalBounds().position.y + 
+        PracticeButtonText.getLocalBounds().size.y / 2.f
+         });
+        PracticeButtonText.setPosition({ PracticeButton.getPosition().x + 
+        PracticeButton.getSize().x / 2.f, PracticeButton.getPosition().y + 
         PracticeButton.getSize().y / 2.f
-        );
+         });
         sf::RectangleShape hintcover(sf::Vector2f(300.f,55.f));
         hintcover.setFillColor(sf::Color::Black);
-        hintcover.setPosition(
-            BigTextButton.getPosition().x + BigTextButton.getSize().x / 2.f - 85.f,
-            BigTextButton.getPosition().y + BigTextButton.getSize().y / 2.f + 140.f
-        );
+        hintcover.setPosition({ BigTextButton.getPosition().x + BigTextButton.getSize().x / 2.f - 85.f, BigTextButton.getPosition().y + BigTextButton.getSize().y / 2.f + 140.f
+         });
         sf::RectangleShape coveracti(sf::Vector2f(50.f,50.f));
         coveracti.setFillColor(sf::Color::White);
-        coveracti.setPosition(
-             BigTextButton.getPosition().x + BigTextButton.getSize().x / 2.f + 300.f,
-            BigTextButton.getPosition().y + BigTextButton.getSize().y / 2.f + 150.f
-        );
+        coveracti.setPosition({ BigTextButton.getPosition().x + BigTextButton.getSize().x / 2.f + 300.f, BigTextButton.getPosition().y + BigTextButton.getSize().y / 2.f + 150.f
+         });
         
-        sf::Text coveractswi("ON", font , 12);
+        sf::Text coveractswi(font, "ON", 12);
         coveractswi.setFillColor(sf::Color::Blue);
-        coveractswi.setOrigin(
-           coveractswi.getLocalBounds().left + coveractswi.getLocalBounds().width / 2.f,
-            coveractswi.getLocalBounds().top + coveractswi.getLocalBounds().height / 2.f
-        );
-        coveractswi.setPosition(
-                coveracti.getPosition().x + coveracti.getSize().x / 2.f ,
-                coveracti.getPosition().y + coveracti.getSize().y / 2.f 
-            );
+        coveractswi.setOrigin({ coveractswi.getLocalBounds().position.x + coveractswi.getLocalBounds().size.x / 2.f, coveractswi.getLocalBounds().position.y + coveractswi.getLocalBounds().size.y / 2.f
+         });
+        coveractswi.setPosition({ coveracti.getPosition().x + coveracti.getSize().x / 2.f , coveracti.getPosition().y + coveracti.getSize().y / 2.f 
+             });
 
-        sf::Text hintText("The HINT", font, 40);
+        sf::Text hintText(font, "The HINT", 40);
         hintText.setFillColor(sf::Color(255, 255, 255, 100));
-        hintText.setOrigin(
-            hintText.getLocalBounds().left + hintText.getLocalBounds().width / 2.f,
-            hintText.getLocalBounds().top + hintText.getLocalBounds().height / 2.f
-        );
-        hintText.setPosition(
-                BigTextButton.getPosition().x + BigTextButton.getSize().x / 2.f ,
-                BigTextButton.getPosition().y + BigTextButton.getSize().y / 2.f + 150.f
-            );
+        hintText.setOrigin({ hintText.getLocalBounds().position.x + hintText.getLocalBounds().size.x / 2.f, hintText.getLocalBounds().position.y + hintText.getLocalBounds().size.y / 2.f
+         });
+        hintText.setPosition({ BigTextButton.getPosition().x + BigTextButton.getSize().x / 2.f , BigTextButton.getPosition().y + BigTextButton.getSize().y / 2.f + 150.f
+             });
 
-        sf::Text inputText("Some Input", font, 40);
+        sf::Text inputText(font, "Some Input", 40);
         inputText.setFillColor(sf::Color::Green);
-        inputText.setOrigin(
-            inputText.getLocalBounds().left + inputText.getLocalBounds().width / 2.f,
-            inputText.getLocalBounds().top + inputText.getLocalBounds().height / 2.f
-        );
-        inputText.setPosition(
-            BigTextButton.getPosition().x + BigTextButton.getSize().x / 2.f,
-            BigTextButton.getPosition().y + BigTextButton.getSize().y / 2.f + 300.f
-        );
+        inputText.setOrigin({ inputText.getLocalBounds().position.x + inputText.getLocalBounds().size.x / 2.f, inputText.getLocalBounds().position.y + inputText.getLocalBounds().size.y / 2.f
+         });
+        inputText.setPosition({ BigTextButton.getPosition().x + BigTextButton.getSize().x / 2.f, BigTextButton.getPosition().y + BigTextButton.getSize().y / 2.f + 300.f
+         });
 
-        sf::Text progressText("Progress", font, 30);
+        sf::Text progressText(font, "Progress", 30);
         progressText.setFillColor(sf::Color::Yellow);
-        progressText.setOrigin(
-            progressText.getLocalBounds().left + progressText.getLocalBounds().width / 2.f,
-            progressText.getLocalBounds().top + progressText.getLocalBounds().height / 2.f
-        );
-        progressText.setPosition(
-            BigTextButton.getPosition().x + BigTextButton.getSize().x / 2.f,
-            BigTextButton.getPosition().y + BigTextButton.getSize().y / 2.f + 225.f
-        );
+        progressText.setOrigin({ progressText.getLocalBounds().position.x + progressText.getLocalBounds().size.x / 2.f, progressText.getLocalBounds().position.y + progressText.getLocalBounds().size.y / 2.f
+         });
+        progressText.setPosition({ BigTextButton.getPosition().x + BigTextButton.getSize().x / 2.f, BigTextButton.getPosition().y + BigTextButton.getSize().y / 2.f + 225.f
+         });
 
-        sf::Text TranslationHead("",font,30);
+        sf::Text TranslationHead(font, "",30);
         TranslationHead.setFillColor(sf::Color::White);
-        TranslationHead.setOrigin(
-            TranslationHead.getLocalBounds().left + TranslationHead.getLocalBounds().width / 2.f,
-            TranslationHead.getLocalBounds().top + TranslationHead.getLocalBounds().height / 2.f
-        );
-        TranslationHead.setPosition(800.f, 20.f);
+        TranslationHead.setOrigin({ TranslationHead.getLocalBounds().position.x + TranslationHead.getLocalBounds().size.x / 2.f, TranslationHead.getLocalBounds().position.y + TranslationHead.getLocalBounds().size.y / 2.f
+         });
+        TranslationHead.setPosition({ 800.f, 20.f });
 
-        sf::Text messageText("Some Message", font, 30);
+        sf::Text messageText(font, "Some Message", 30);
         messageText.setFillColor(sf::Color::Red);
-        messageText.setOrigin(
-            messageText.getLocalBounds().left + messageText.getLocalBounds().width / 2.f,
-            messageText.getLocalBounds().top + messageText.getLocalBounds().height / 2.f
-        );
-        messageText.setPosition(
-            BigTextButton.getPosition().x + BigTextButton.getSize().x / 2.f + 375.f,
-            BigTextButton.getPosition().y + BigTextButton.getSize().y / 2.f + 600.f
-        );
+        messageText.setOrigin({ messageText.getLocalBounds().position.x + messageText.getLocalBounds().size.x / 2.f, messageText.getLocalBounds().position.y + messageText.getLocalBounds().size.y / 2.f
+         });
+        messageText.setPosition({ BigTextButton.getPosition().x + BigTextButton.getSize().x / 2.f + 375.f, BigTextButton.getPosition().y + BigTextButton.getSize().y / 2.f + 600.f
+         });
 
-        sf::Text Congrats ("Congratulations!", font, 30);
+        sf::Text Congrats (font, "Congratulations!", 30);
         Congrats.setFillColor(sf::Color::Green);
-        Congrats.setPosition(1200, 300);
+        Congrats.setPosition({ 1200, 300 });
 
        
         
         sf::RectangleShape TranslationButton (sf::Vector2f(400.f,80.f));
         TranslationButton.setFillColor(sf::Color::Black);
-        TranslationButton.setPosition(
-            ( (windowSize.x - objectSize.x) /2.f),
-            ( (windowSize.y - objectSize.y) /2.f) - 120.f
-        );
+        TranslationButton.setPosition({ ( (windowSize.x - objectSize.x) /2.f), ( (windowSize.y - objectSize.y) /2.f) - 120.f
+         });
         
 
         sf::RectangleShape exitbutton (sf::Vector2f(400.f,80.f));
-        exitbutton.setPosition(((windowSize.x - objectSize.x) / 2.f),
-        ((windowSize.y - objectSize.y) / 2.f) + 120.f);
+        exitbutton.setPosition({ ((windowSize.x - objectSize.x) / 2.f), ((windowSize.y - objectSize.y) / 2.f) + 120.f });
         exitbutton.setFillColor(sf::Color::Black);
 
         sf::RectangleShape Backbutton(sf::Vector2f(80.f,50.f));
         Backbutton.setFillColor(sf::Color::Green);
-        Backbutton.setPosition(1825.f, 20.f);
+        Backbutton.setPosition({ 1825.f, 20.f });
 
         sf::RectangleShape Clearbutton (sf::Vector2f(80.f,50.f));
         Clearbutton.setFillColor(sf::Color::Green);
-        Clearbutton.setPosition(
-            Backbutton.getGlobalBounds().left , Backbutton.getGlobalBounds().top + Backbutton.getGlobalBounds().height + 30.f
-        );
+        Clearbutton.setPosition({ Backbutton.getGlobalBounds().position.x , Backbutton.getGlobalBounds().position.y + Backbutton.getGlobalBounds().size.y + 30.f
+         });
 
         sf::RectangleShape SwitchButton (sf::Vector2f(80.f,50.f));
         SwitchButton.setFillColor(sf::Color::White);
-        SwitchButton.setPosition(
-            Clearbutton.getGlobalBounds().left,
-            Clearbutton.getGlobalBounds().top + Clearbutton.getGlobalBounds().height + 150.f
-        );
+        SwitchButton.setPosition({ Clearbutton.getGlobalBounds().position.x, Clearbutton.getGlobalBounds().position.y + Clearbutton.getGlobalBounds().size.y + 150.f
+         });
         
         sf::RectangleShape NextLessonButton (sf::Vector2f(80.f,50.f));
         NextLessonButton.setFillColor(sf::Color::Green);
-        NextLessonButton.setPosition(
-            SwitchButton.getGlobalBounds().left,
-            SwitchButton.getGlobalBounds().top + SwitchButton.getGlobalBounds().height + 150.f
-        );
+        NextLessonButton.setPosition({ SwitchButton.getGlobalBounds().position.x, SwitchButton.getGlobalBounds().position.y + SwitchButton.getGlobalBounds().size.y + 150.f
+         });
 
 
         sf::RectangleShape Lsidebar (sf::Vector2f(150.f, window.getSize().y));
         Lsidebar.setFillColor(sf::Color::White);
-        Lsidebar.setPosition(BigTextButton.getPosition().x,0.f);
+        Lsidebar.setPosition({ BigTextButton.getPosition().x, 0.f });
 
        sf::RectangleShape Rsidebar (sf::Vector2f(200.f, window.getSize().y));
         Rsidebar.setFillColor(sf::Color::White);
-        Rsidebar.setPosition(BigTextButton.getPosition().x + BigTextButton.getSize(). x,0.f);
+        Rsidebar.setPosition({ BigTextButton.getPosition().x + BigTextButton.getSize(). x, 0.f });
 
-        sf::Text NextLessonText("Next Lesson", font, 18);
+        sf::Text NextLessonText(font, "Next Lesson", 18);
         NextLessonText.setFillColor(sf::Color::Red);
-        NextLessonText.setOrigin(
-            NextLessonText.getLocalBounds().left + NextLessonText.getLocalBounds().width / 2.f,
-            NextLessonText.getLocalBounds().top + NextLessonText.getLocalBounds().height / 2.f
-        );
-        NextLessonText.setPosition(
-            NextLessonButton.getPosition().x + NextLessonButton.getSize().x / 2.f,
-            NextLessonButton.getPosition().y + NextLessonButton.getSize().y / 2.f
-        );
+        NextLessonText.setOrigin({ NextLessonText.getLocalBounds().position.x + NextLessonText.getLocalBounds().size.x / 2.f, NextLessonText.getLocalBounds().position.y + NextLessonText.getLocalBounds().size.y / 2.f
+         });
+        NextLessonText.setPosition({ NextLessonButton.getPosition().x + NextLessonButton.getSize().x / 2.f, NextLessonButton.getPosition().y + NextLessonButton.getSize().y / 2.f
+         });
 
-        sf::Text SwitchText ("Switch", font, 18);
+        sf::Text SwitchText (font, "Switch", 18);
         SwitchText.setFillColor(sf::Color::Red);
-        SwitchText.setOrigin(
-            SwitchText.getLocalBounds().left + SwitchText.getLocalBounds().width / 2.f,
-            SwitchText.getLocalBounds().top + SwitchText.getLocalBounds().height / 2.f
-        );
-        SwitchText.setPosition(
-            SwitchButton.getPosition().x + SwitchButton.getSize().x / 2.f,
-            SwitchButton.getPosition().y + SwitchButton.getSize().y / 2.f
-        );
+        SwitchText.setOrigin({ SwitchText.getLocalBounds().position.x + SwitchText.getLocalBounds().size.x / 2.f, SwitchText.getLocalBounds().position.y + SwitchText.getLocalBounds().size.y / 2.f
+         });
+        SwitchText.setPosition({ SwitchButton.getPosition().x + SwitchButton.getSize().x / 2.f, SwitchButton.getPosition().y + SwitchButton.getSize().y / 2.f
+         });
 
         sf::CircleShape MorseKey(40.f); // 40.f radius for 80.f diameter
         MorseKey.setFillColor(sf::Color::Red);
         
-        sf::Text MorseKeytext("Morse Key", font, 15);
+        sf::Text MorseKeytext(font, "Morse Key", 15);
         MorseKeytext.setFillColor(sf::Color::White);
        
-        sf::Text ClearText("Clear",font, 18);
+        sf::Text ClearText(font, "Clear", 18);
         ClearText.setFillColor(sf::Color::Red);
-        ClearText.setOrigin(
-            ClearText.getLocalBounds().left + ClearText.getLocalBounds().width / 2.f,
-            ClearText.getLocalBounds().top + ClearText.getLocalBounds().height / 2.f
-        );
-        ClearText.setPosition(
-        Clearbutton.getPosition().x + Clearbutton.getSize().x / 2.f,
-        Clearbutton.getPosition().y + Clearbutton.getSize().y / 2.f
-        );
+        ClearText.setOrigin({ ClearText.getLocalBounds().position.x + ClearText.getLocalBounds().size.x / 2.f, ClearText.getLocalBounds().position.y + ClearText.getLocalBounds().size.y / 2.f
+         });
+        ClearText.setPosition({ Clearbutton.getPosition().x + Clearbutton.getSize().x / 2.f, Clearbutton.getPosition().y + Clearbutton.getSize().y / 2.f
+         });
 
-        sf::Text LessonButtonText ("LESSONS" , font, 24);
+        sf::Text LessonButtonText (font, "LESSONS", 24);
         LessonButtonText.setFillColor(sf::Color::Green);
-        LessonButtonText.setOrigin(
-        LessonButtonText.getLocalBounds().left + 
-        LessonButtonText.getLocalBounds().width / 2.f,
-        LessonButtonText.getLocalBounds().top + 
-        LessonButtonText.getLocalBounds().height / 2.f
-        );
+        LessonButtonText.setOrigin({ LessonButtonText.getLocalBounds().position.x + 
+        LessonButtonText.getLocalBounds().size.x / 2.f, LessonButtonText.getLocalBounds().position.y + 
+        LessonButtonText.getLocalBounds().size.y / 2.f
+         });
 
-        LessonButtonText.setPosition(
-        LessonButton.getPosition().x + 
-        LessonButton.getSize().x / 2.f,
-        LessonButton.getPosition().y + 
+        LessonButtonText.setPosition({ LessonButton.getPosition().x + 
+        LessonButton.getSize().x / 2.f, LessonButton.getPosition().y + 
         LessonButton.getSize().y / 2.f
-        );
+         });
 
-        sf::Text TranslationText ("Translation", font, 24);
+        sf::Text TranslationText (font, "Translation", 24);
         TranslationText.setFillColor(sf::Color::Green);
-        TranslationText.setOrigin(
-        TranslationText.getLocalBounds().left + TranslationText.getLocalBounds().width / 2.f,
-        TranslationText.getLocalBounds().top + TranslationText.getLocalBounds().height / 2.f
-        );
-        TranslationText.setPosition(
-        TranslationButton.getPosition().x + TranslationButton.getSize().x / 2.f,
-        TranslationButton.getPosition().y + TranslationButton.getSize().y / 2.f
-        );
+        TranslationText.setOrigin({ TranslationText.getLocalBounds().position.x + TranslationText.getLocalBounds().size.x / 2.f, TranslationText.getLocalBounds().position.y + TranslationText.getLocalBounds().size.y / 2.f
+         });
+        TranslationText.setPosition({ TranslationButton.getPosition().x + TranslationButton.getSize().x / 2.f, TranslationButton.getPosition().y + TranslationButton.getSize().y / 2.f
+         });
         
-        sf::Text exitText ("EXIT", font, 24);
+        sf::Text exitText (font, "EXIT", 24);
         exitText.setFillColor(sf::Color::Green);
-        exitText.setOrigin(
-        exitText.getLocalBounds().left + exitText.getLocalBounds().width / 2.f,
-        exitText.getLocalBounds().top + exitText.getLocalBounds().height / 2.f
-        );  
-        exitText.setPosition(
-        exitbutton.getPosition().x + exitbutton.getSize().x / 2.f,
-        exitbutton.getPosition().y + exitbutton.getSize().y /   2.f
-        );
+        exitText.setOrigin({ exitText.getLocalBounds().position.x + exitText.getLocalBounds().size.x / 2.f, exitText.getLocalBounds().position.y + exitText.getLocalBounds().size.y / 2.f
+         });  
+        exitText.setPosition({ exitbutton.getPosition().x + exitbutton.getSize().x / 2.f, exitbutton.getPosition().y + exitbutton.getSize().y /   2.f
+         });
         
         
-        sf::Text BackText ("Back", font, 18);
+        sf::Text BackText (font, "Back", 18);
         BackText.setFillColor(sf::Color::Red);
-        BackText.setOrigin(
-            BackText.getLocalBounds().left + BackText.getLocalBounds().width / 2.f,
-            BackText.getLocalBounds().top + BackText.getLocalBounds().height / 2.f          
-        );
-        BackText.setPosition(
-            Backbutton.getPosition().x + Backbutton.getSize().x /2.f,
-            Backbutton.getPosition().y + Backbutton.getSize().y / 2.f
-        );
+        BackText.setOrigin({ BackText.getLocalBounds().position.x + BackText.getLocalBounds().size.x / 2.f, BackText.getLocalBounds().position.y + BackText.getLocalBounds().size.y / 2.f          
+         });
+        BackText.setPosition({ Backbutton.getPosition().x + Backbutton.getSize().x /2.f, Backbutton.getPosition().y + Backbutton.getSize().y / 2.f
+         });
 
 
         std::string Input;
-        sf::Text InputText(" ", font, 24);
+        sf::Text InputText(font, " ", 24);
         InputText.setFillColor(sf::Color::White);
-        InputText.setPosition(50.f,50.f);
+        InputText.setPosition({ 50.f, 50.f });
 
         std::string Output;
-        sf::Text OutputText(" ", font, 24);
+        sf::Text OutputText(font, " ", 24);
         OutputText.setFillColor(sf::Color::Green);
-        OutputText.setPosition(50.f,550.f);
+        OutputText.setPosition({ 50.f, 550.f });
 
 
         sf::RectangleShape InputBox(sf::Vector2f(1000.f,400.f));
         InputBox.setFillColor(sf::Color::Black);
-        InputBox.setPosition(0.f,0.f);
+        InputBox.setPosition({ 0.f, 0.f });
 
         sf::RectangleShape OutputBox(sf::Vector2f(1000.f,400.f));
         OutputBox.setFillColor(sf::Color::Black);
-        OutputBox.setPosition(0.f,500.f);
+        OutputBox.setPosition({ 0.f, 500.f });
 
         sf::RectangleShape sidebar(sf::Vector2f(500.f, window.getSize().y));
         sidebar.setFillColor(sf::Color(50,50,50));
-        sidebar.setPosition(0.f,0.f);
+        sidebar.setPosition({ 0.f, 0.f });
 
         sf::Clock pressclock;
         bool isPressed = false;
 
         sf::SoundBuffer dotbuffer, dashbuffer,spacebuffer;
-        sf::Sound dotSound, dashSound,spaceSound;
         if (!dotbuffer.loadFromFile("assets/dot.wav") || !dashbuffer.loadFromFile("assets/dash.wav")) {//loading sounds
             std::cerr << "Error loading sound files." << std::endl;
             return 1;
         }
-        
-        dotSound.setBuffer(dotbuffer);
-        dashSound.setBuffer(dashbuffer);
-        spaceSound = dotSound;
+
+        sf::Sound dotSound(dotbuffer), dashSound(dashbuffer), spaceSound(dotbuffer);
         spaceSound.setPitch(0.5f);
         spaceSound.setVolume(50);
 
         
         while (window.isOpen()) { // Main application loop, runs until the window is closed
-    sf::Event event;
-    while (window.pollEvent(event)) { // Poll for all window events (keyboard, mouse, etc.)
-        if (event.type == sf::Event::Closed) { // If the user closes the window
+    while (const std::optional event = window.pollEvent()) { // Poll for all window events (keyboard, mouse, etc.)
+        if (event->is<sf::Event::Closed>()) { // If the user closes the window
             window.close(); // Close the window and exit the loop
         }
 
         // Handle mouse button press events
-        if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button == sf::Mouse::Left) {
+        if (const auto* mousePressed = event->getIf<sf::Event::MouseButtonPressed>(); mousePressed && mousePressed->button == sf::Mouse::Button::Left) {
             sf::Vector2f mousepos = window.mapPixelToCoords(sf::Mouse::getPosition(window)); // Get mouse position in window coordinates
 
             // Main menu button logic
@@ -880,15 +780,13 @@ void updateUI(sf::RenderWindow& window, AppStates currentstate, std::string& Inp
                         int row = i % practiceperCol;
                         sf::RectangleShape btn1(sf::Vector2f(80.f, 40.f));
                         btn1.setFillColor(sf::Color(200, 200, 255));
-                        btn1.setPosition(
-                            sidebarstart.x + col * (buttonwidth + spacing),
-                            sidebarstart.y + row * (buttonheight + spacing) - 40.f
-                        );
+                        btn1.setPosition({ sidebarstart.x + col * (buttonwidth + spacing), sidebarstart.y + row * (buttonheight + spacing) - 40.f
+                         });
                         sidebarPracticeButtons.push_back(btn1);
 
-                        sf::Text labelP("P" + std::to_string(i + 1), font, 16);
+                        sf::Text labelP(font, "P" + std::to_string(i + 1), 16);
                         labelP.setFillColor(sf::Color::Black);
-                        labelP.setPosition(btn1.getPosition().x + 40.f, btn1.getPosition().y + 5.f);
+                        labelP.setPosition({ btn1.getPosition().x + 40.f, btn1.getPosition().y + 5.f });
                         sidebarPracticeLabels.push_back(labelP);
 
                         yOffset += 50.f;
@@ -978,7 +876,7 @@ void updateUI(sf::RenderWindow& window, AppStates currentstate, std::string& Inp
         }
 
         // Handle MorseKey button release (determine dot/dash/space)
-        if (event.type == sf::Event::MouseButtonReleased && (event.mouseButton.button == sf::Mouse::Left || event.mouseButton.button == sf::Mouse::Right) && isPressed) {
+        if (const auto* mouseReleased = event->getIf<sf::Event::MouseButtonReleased>(); mouseReleased && (mouseReleased->button == sf::Mouse::Button::Left || mouseReleased->button == sf::Mouse::Button::Right) && isPressed) {
             float duration = pressclock.getElapsedTime().asSeconds(); // Get press duration
             char inputChar = (duration < 0.2f) ? '.' : (duration < 0.5f) ? '-' : ' '; // Short press = dot, medium = dash, long = space
 
@@ -1000,8 +898,8 @@ void updateUI(sf::RenderWindow& window, AppStates currentstate, std::string& Inp
         }
 
         // Handle keyboard text input events
-        if (event.type == sf::Event::TextEntered) {
-            char typed = static_cast<char>(event.text.unicode); // Convert Unicode to ASCII
+        if (const auto* textEntered = event->getIf<sf::Event::TextEntered>()) {
+            char typed = static_cast<char>(textEntered->unicode); // Convert Unicode to ASCII
 
             // Lesson mode input handling
             if (currentstate == AppStates::LessonButton && currentStep < LessonSteps.size()) {
