@@ -293,6 +293,15 @@ int main() {
                 window.close(); // Close the window and exit the loop
             }
 
+            // Esc returns to the main menu (and exits the app from the menu)
+            if (const auto* keyPressed = event->getIf<sf::Event::KeyPressed>(); keyPressed && keyPressed->code == sf::Keyboard::Key::Escape) {
+                if (currentState == AppStates::MainMenu) {
+                    window.close();
+                } else {
+                    currentState = AppStates::MainMenu;
+                }
+            }
+
             // Handle mouse button press events
             if (const auto* mousePressed = event->getIf<sf::Event::MouseButtonPressed>(); mousePressed && mousePressed->button == sf::Mouse::Button::Left) {
                 sf::Vector2f mousePos = window.mapPixelToCoords(sf::Mouse::getPosition(window)); // Get mouse position in window coordinates
@@ -474,8 +483,16 @@ int main() {
                         }
                         lessonInput.clear();
                     }
+                } else if (currentState == AppStates::Morse2Text) {
+                    // In Morse-to-Text mode the keyboard acts as a straight key:
+                    // '.' and '-' build the Morse input, Space separates letters, other keys are ignored.
+                    if (typed == 8 && !typedInput.empty()) { // Backspace
+                        typedInput.pop_back();
+                    } else if (typed == '.' || typed == '-' || typed == ' ') {
+                        typedInput += typed;
+                    }
                 } else {
-                    // General input handling for translation modes
+                    // Free typing for Text-to-Morse mode
                     if (typed == 8 && !typedInput.empty()) { // Backspace
                         typedInput.pop_back();
                     } else if (typed >= 32 && typed <= 127) { // Printable ASCII
@@ -487,7 +504,7 @@ int main() {
                 if (currentState == AppStates::Practice && currentStep < practiceSteps.size()) {
                     if (typed == 8 && !practiceInput.empty()) { // Backspace
                         practiceInput.pop_back();
-                    } else if (typed == '.' || typed == '-') { // Dot or dash
+                    } else if (typed == '.' || typed == '-' || typed == ' ') { // Dot, dash, or letter separator (same as a long press on the key)
                         practiceInput += typed;
                     } else if (typed == '\r' || typed == '\n') { // Enter key to check answer
                         const PracticeStep& step = practiceSteps[currentStep];
