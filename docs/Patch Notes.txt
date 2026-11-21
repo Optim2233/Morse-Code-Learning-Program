@@ -1,0 +1,24 @@
+XX-XX-2025 V1.0
+
+Beta versions Finished. Lack of Lessons and Practice Files.
+
+
+01-09-2025 V1.2
+
+Fixed Ghost Switch Button Error.
+Visual Improvements.
+Comments added
+Fixed small bugs
+Separate Space sound 
+Lack of Lessons and Practice Files(in progress)
+Added clarity to Translation Mode
+---------------------------------------
+Improvements on feedbacks
+-------------------------------------------
+07-09-2025 V1.3
+
+Added and Error-Checked the Lessons and Practices 
+Visual Improvements and adjustments
+Error-checked
+Comments added
+Presentation Ready

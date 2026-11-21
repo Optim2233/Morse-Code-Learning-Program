@@ -1,0 +1,8 @@
+# Build output (keep the runnable exe/DLLs on disk, out of git)
+bin/*.exe
+bin/*.dll
+
+# Editor / OS junk
+.vscode/
+*.out
+Thumbs.db
